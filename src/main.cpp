@@ -18,14 +18,16 @@ int vlhkost_pudy_MIN = 4095; // Minimum analog value for soil moisture sensor (d
 int vlhkost_pudy_MAX = 0;    // Maximum analog value for soil moisture
 int puda_MIN_percent = 30; // Minimum soil moisture percentage to turn off the pump
 
-float osa_x = 0.0; // Variable for X axis
-float osa_y = 0.0; // Variable for Y axis
-float osa_z = 0.0; // Variable for Z axis
+float osa_x = 10.0; // Variable for X axis
+float osa_y = 10.0; // Variable for Y axis
+float osa_z = 10.0; // Variable for Z axis
+float offset = 0; // Offset for water level calculation
 
-int pozice_x = 100; // Variable for X position
-int pozice_y = 25; // Variable for Y position
-int sirka_obdelniku = 10; // Variable for width
-int vyska_obdelniku = 50;  // Variable for height
+int pozice_x = 115; // Variable for X position
+int pozice_y = 5; // Variable for Y position
+int pozice_objemu_y = 54; // Variable for Y position of water volume
+int sirka_obdelniku = 12; // Variable for width
+int vyska_obdelniku = 54;  // Variable for height
 
 int pauza = 200; // Pause duration in milliseconds
 
@@ -80,7 +82,7 @@ BMPData BMP280Setup() {
 
 float soilMoistureSetup() {
   int vlhkost_pudy_analog = analogRead(Moisture_pin); // Initialize soil moisture sensor pin
-  float vlhkost_pudy_percent = map(vlhkost_pudy_analog, vlhkost_pudy_MAX, vlhkost_pudy_MIN, 0, 100); // Map analog value to percentage
+  int vlhkost_pudy_percent = map(vlhkost_pudy_analog, vlhkost_pudy_MAX, vlhkost_pudy_MIN, 0, 100); // Map analog value to percentage
   
   Serial.print("Vlhkost půdy: ");
   Serial.print(vlhkost_pudy_percent);
@@ -113,6 +115,7 @@ float HCSR04Setup() {
 }
 
 void loop() {
+  display.clearDisplay(); // Clear the display for new data
   BMPData bmp_data = BMP280Setup();
   Serial.print("Teplota:");
   Serial.println(bmp_data.teplota);
@@ -132,7 +135,7 @@ void loop() {
     Serial.println("Pumpa vypnuta");
   }
 
-  float objem_vody = (osa_x * osa_y * (osa_z - vzdalenost)); // Calculate water volume percentage
+  int objem_vody = (osa_x * osa_y * (osa_z - vzdalenost)); // Calculate water volume percentage
   Serial.print("Objem vody v nádrži: ");
   Serial.print(objem_vody);
   Serial.println(" ml");
@@ -141,15 +144,17 @@ void loop() {
   display.print(objem_vody);
   display.println(" ml");
   display.print("Teplota:");
-  display.print(bmp_data.teplota);
-  display.println(" °C");
+  double teplota = round(bmp_data.teplota * 10) / 10.0;
+  display.print(teplota);
+  display.println(" C");
   display.print("Tlak:");
-  display.print(bmp_data.tlak);
+  int tlak = round(bmp_data.tlak);
+  display.print(tlak);
   display.println(" hPa");
 
   display.drawRect(pozice_x, pozice_y, sirka_obdelniku, vyska_obdelniku, SSD1306_WHITE); // Draw rectangle on display
   if (objem_vody > 0) {
-  display.fillRect(pozice_x, pozice_y, sirka_obdelniku, (osa_z - vzdalenost) / osa_z * vyska_obdelniku, SSD1306_WHITE); // Fill rectangle based on water volume
+  display.fillRect(pozice_x, pozice_objemu_y, sirka_obdelniku, -((osa_z - vzdalenost - offset) / osa_z * vyska_obdelniku), SSD1306_WHITE); // Fill rectangle based on water volume
   }
   display.display(); // Update the display with new data
 
