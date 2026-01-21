@@ -153,5 +153,5 @@ void loop() {
   }
   display.display(); // Update the display with new data
 
-  delay(pauza); // Wait for 1 second before next reading
+  delay(pauza); // Wait for pauza seconds before next reading
 }
