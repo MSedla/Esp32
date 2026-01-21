@@ -38,7 +38,24 @@ const String password = "PASSWORD";
 
 void setup() {
   Serial.begin(115200);
+  
+  // Initialize the SSD1306 display
+  if (!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {
+    Serial.println("SSD1306 allocation failed");
+    for (;;);
+  }
 
+  // Clear the display buffer
+  display.clearDisplay();
+
+  // Set text size and color
+  display.setTextSize(1);
+  display.setTextColor(SSD1306_WHITE);
+  
+  // Setup pins for ultrasonic sensor
+  pinMode(TRIG_PIN, OUTPUT);
+  pinMode(ECHO_PIN, INPUT);
+  pinMode(pumpPin, OUTPUT);
 }
 
 struct BMPData {
@@ -60,21 +77,6 @@ BMPData BMP280Setup() {
   return data;  // Vrátí obě hodnoty
 }
 
-void SSD1306Setup() {
-  // Initialize the SSD1306 display
-  if (!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {
-    Serial.println("SSD1306 allocation failed");
-    for (;;);
-  }
-
-  // Clear the display buffer
-  display.clearDisplay();
-
-  // Set text size and color
-  display.setTextSize(1);
-  display.setTextColor(SSD1306_WHITE);
-  display.setCursor(0, 0);
-}
 
 float soilMoistureSetup() {
   int vlhkost_pudy_analog = analogRead(Moisture_pin); // Initialize soil moisture sensor pin
@@ -117,7 +119,8 @@ void loop() {
   Serial.print("Tlak: ");
   Serial.println(bmp_data.tlak);
 
-  SSD1306Setup();
+  display.setCursor(0, 0);
+
   vlhkost_pudy_percent = soilMoistureSetup();  // Ulož vrácené hodnotu
   float vzdalenost = HCSR04Setup();  // Ulož vrácené hodnotu
   
@@ -139,7 +142,7 @@ void loop() {
   display.println(" ml");
   display.print("Teplota: ");
   display.print(bmp_data.teplota);
-  display.println(" C");
+  display.println(" °C");
   display.print("Tlak: ");
   display.print(bmp_data.tlak);
   display.println(" hPa");
