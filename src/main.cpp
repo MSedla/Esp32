@@ -22,12 +22,12 @@ float osa_x = 0.0; // Variable for X axis
 float osa_y = 0.0; // Variable for Y axis
 float osa_z = 0.0; // Variable for Z axis
 
-int pozice_x = 10; // Variable for X position
-int pozice_y = 20; // Variable for Y position
+int pozice_x = 100; // Variable for X position
+int pozice_y = 25; // Variable for Y position
 int sirka_obdelniku = 10; // Variable for width
-int vyska_obdelniku = 100;  // Variable for height
+int vyska_obdelniku = 50;  // Variable for height
 
-int pauza = 1000; // Pause duration in milliseconds
+int pauza = 200; // Pause duration in milliseconds
 
 // SSD1306 display object
 Adafruit_SSD1306 display(128, 64, &Wire, -1);
@@ -86,7 +86,7 @@ float soilMoistureSetup() {
   Serial.print(vlhkost_pudy_percent);
   Serial.println(" %");
 
-  display.print("Vlhkost půdy: ");
+  display.print("Vlhkost pudy:");
   display.print(vlhkost_pudy_percent);
   display.println(" %");
 
@@ -114,7 +114,7 @@ float HCSR04Setup() {
 
 void loop() {
   BMPData bmp_data = BMP280Setup();
-  Serial.print("Teplota: ");
+  Serial.print("Teplota:");
   Serial.println(bmp_data.teplota);
   Serial.print("Tlak: ");
   Serial.println(bmp_data.tlak);
@@ -137,13 +137,13 @@ void loop() {
   Serial.print(objem_vody);
   Serial.println(" ml");
 
-  display.print("Rezervoár: ");
+  display.print("Rezervoar:");
   display.print(objem_vody);
   display.println(" ml");
-  display.print("Teplota: ");
+  display.print("Teplota:");
   display.print(bmp_data.teplota);
   display.println(" °C");
-  display.print("Tlak: ");
+  display.print("Tlak:");
   display.print(bmp_data.tlak);
   display.println(" hPa");
 
