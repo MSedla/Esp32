@@ -14,8 +14,8 @@
 #define pumpPin 19    // Pin for water pump control
 
 float vlhkost_pudy_percent = 0; // Variable to store soil moisture percentage
-int vlhkost_pudy_MIN = 4095; // Minimum analog value for soil moisture sensor (dry soil)
-int vlhkost_pudy_MAX = 0;    // Maximum analog value for soil moisture
+int vlhkost_pudy_MIN = 3270; // Minimum analog value for soil moisture sensor (dry soil)
+int vlhkost_pudy_MAX = 1150;    // Maximum analog value for soil moisture
 int puda_MIN_percent = 30; // Minimum soil moisture percentage to turn off the pump
 
 float osa_x = 10.0; // Variable for X axis
@@ -81,12 +81,13 @@ BMPData BMP280Setup() {
 
 float soilMoistureSetup() {
   int vlhkost_pudy_analog = analogRead(Moisture_pin); // Initialize soil moisture sensor pin
-  int vlhkost_pudy_percent = map(vlhkost_pudy_analog, vlhkost_pudy_MAX, vlhkost_pudy_MIN, 0, 100); // Map analog value to percentage
+  int vlhkost_pudy_percent = map(vlhkost_pudy_analog, vlhkost_pudy_MAX, vlhkost_pudy_MIN, 100, 0); // Map analog value to percentage
   
   Serial.print("Vlhkost půdy: ");
   Serial.print(vlhkost_pudy_percent);
   Serial.println(" %");
-
+  Serial.print("Analogová hodnota půdy: ");
+  Serial.println(vlhkost_pudy_analog);
   display.print("Vlhkost pudy:");
   display.print(vlhkost_pudy_percent);
   display.println(" %");
