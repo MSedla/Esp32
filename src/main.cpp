@@ -12,6 +12,8 @@
 #define TRIG_PIN 5     // Pin for ultrasonic sensor TRIG
 #define ECHO_PIN 18    // Pin for ultrasonic sensor ECHO
 #define pumpPin 19    // Pin for water pump control
+#define TOUCH_PIN T0      // T0 = GPIO 4
+//#define LED_PIN   2       // vestavěná LED (většinou GPIO 2)
 
 float vlhkost_pudy_percent = 0; // Variable to store soil moisture percentage
 int vlhkost_pudy_MIN = 3270; // Minimum analog value for soil moisture sensor (dry soil)
@@ -29,6 +31,8 @@ int sirka_obdelniku = 12; // Variable for width
 int vyska_obdelniku = 54;  // Variable for height
 
 int pauza = 200; // Pause duration in milliseconds
+
+int touchThreshold = 40;  // prahová hodnota touch pinu (s vyssi hodnotou vyssi citlivost)
 
 // SSD1306 display object
 Adafruit_SSD1306 display(128, 64, &Wire, -1);
@@ -126,6 +130,14 @@ void loop() {
 
   vlhkost_pudy_percent = soilMoistureSetup();  // Ulož vrácené hodnotu
   float vzdalenost = HCSR04Setup();  // Ulož vrácené hodnotu
+
+  int touchValue = touchRead(TOUCH_PIN);  // Read touch sensor value
+  Serial.print("Touch Value: ");
+  Serial.println(touchValue);
+
+   if (touchValue < touchThreshold) {
+    Serial.println("TOUCH!");
+  }
   
   if (vlhkost_pudy_percent < puda_MIN_percent) { // If soil moisture is below 30%
     digitalWrite(pumpPin, HIGH); // Turn on the water pump
