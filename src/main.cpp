@@ -20,12 +20,11 @@ int puda_MIN_percent = 30; // Minimum soil moisture percentage to turn off the p
 
 float osa_x = 10.0; // Variable for X axis
 float osa_y = 10.0; // Variable for Y axis
-float osa_z = 10.0; // Variable for Z axis
+float osa_z = 17.0; // Variable for Z axis
 float offset = 0; // Offset for water level calculation
 
 int pozice_x = 115; // Variable for X position
 int pozice_y = 5; // Variable for Y position
-int pozice_objemu_y = 54; // Variable for Y position of water volume
 int sirka_obdelniku = 12; // Variable for width
 int vyska_obdelniku = 54;  // Variable for height
 
@@ -135,7 +134,7 @@ void loop() {
     Serial.println("Pumpa vypnuta");
   }
 
-  int objem_vody = (osa_x * osa_y * (osa_z - vzdalenost)); // Calculate water volume percentage
+  int objem_vody = round((osa_x * osa_y * (osa_z - vzdalenost)) / 10) * 10; // Calculate water volume percentage
   Serial.print("Objem vody v nádrži: ");
   Serial.print(objem_vody);
   Serial.println(" ml");
@@ -144,19 +143,18 @@ void loop() {
   display.print(objem_vody);
   display.println(" ml");
   display.print("Teplota:");
-  double teplota = round(bmp_data.teplota * 10) / 10.0;
-  display.print(teplota);
+  display.print(bmp_data.teplota, 1);
+  display.drawCircle(74, 18, 1, SSD1306_WHITE); // Draw degree symbol
   display.println(" C");
   display.print("Tlak:");
-  int tlak = round(bmp_data.tlak);
-  display.print(tlak);
+  display.print(bmp_data.tlak, 0);
   display.println(" hPa");
 
-  display.drawRect(pozice_x, pozice_y, sirka_obdelniku, vyska_obdelniku, SSD1306_WHITE); // Draw rectangle on display
+  display.fillRect(pozice_x, pozice_y, sirka_obdelniku, vyska_obdelniku, SSD1306_WHITE); // Draw rectangle on display
   if (objem_vody > 0) {
-  display.fillRect(pozice_x, pozice_objemu_y, sirka_obdelniku, -((osa_z - vzdalenost - offset) / osa_z * vyska_obdelniku), SSD1306_WHITE); // Fill rectangle based on water volume
+  display.fillRect(pozice_x + 1, pozice_y + 1, sirka_obdelniku - 2, ((osa_z - vzdalenost - offset) / osa_z * vyska_obdelniku), SSD1306_BLACK); // Fill rectangle based on water volume
   }
   display.display(); // Update the display with new data
 
-  delay(pauza); // Wait for pauza seconds before next reading
+  delay(pauza); // Wait for pauza seconds before next readin
 }
