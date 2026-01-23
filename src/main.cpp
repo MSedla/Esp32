@@ -17,7 +17,7 @@
 
 float vlhkost_pudy_percent = 0; // Variable to store soil moisture percentage
 int vlhkost_pudy_MIN = 3270; // Minimum analog value for soil moisture sensor (dry soil)
-int vlhkost_pudy_MAX = 1150;    // Maximum analog value for soil moisture
+int vlhkost_pudy_MAX = 1600;    // Maximum analog value for soil moisture
 int puda_MIN_percent = 30; // Minimum soil moisture percentage to turn off the pump
 
 float osa_x = 10.0; // Variable for X axis
