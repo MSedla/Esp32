@@ -6,7 +6,7 @@
 #include <Adafruit_GFX.h>
 #include <SPI.h>
 
-#define Moisture_pin 34  // Pin for soil moisture sensor
+#define Moisture_pin 33  // Pin for soil moisture sensor
 #define scl 22          // Pin for I2C SCL
 #define sda 21          // Pin for I2C SDA
 #define TRIG_PIN 5     // Pin for ultrasonic sensor TRIG
@@ -140,8 +140,8 @@ void loop() {
   }
   
   if (vlhkost_pudy_percent < puda_MIN_percent) { // If soil moisture is below 30%
-    digitalWrite(pumpPin, HIGH); // Turn on the water pump
-    Serial.println("Pumpa zapnuta");
+    //digitalWrite(pumpPin, HIGH); // Turn on the water pump
+    //Serial.println("Pumpa zapnuta");
   } else {
     digitalWrite(pumpPin, LOW); // Turn off the water pump
     Serial.println("Pumpa vypnuta");
