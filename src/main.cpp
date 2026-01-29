@@ -7,7 +7,7 @@
 #include <SPI.h>
 
 #define Moisture_pin 34  // Pin for soil moisture sensor
-#define scl 22          // Pin for I2C SCL
+#define scl 19          // Pin for I2C SCL
 #define sda 21          // Pin for I2C SDA
 #define TRIG_PIN 5     // Pin for ultrasonic sensor TRIG
 #define ECHO_PIN 18    // Pin for ultrasonic sensor ECHO
@@ -129,7 +129,7 @@ void loop() {
   display.setCursor(0, 0);
 
   vlhkost_pudy_percent = soilMoistureSetup();  // Ulož vrácené hodnotu
-  float vzdalenost = HCSR04Setup();  // Ulož vrácené hodnotu
+  float vzdalenost = 0.5;  // Ulož vrácené hodnotu
 
   int touchValue = touchRead(TOUCH_PIN);  // Read touch sensor value
   Serial.print("Touch Value: ");
