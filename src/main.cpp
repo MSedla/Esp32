@@ -163,8 +163,8 @@ void loop() {
   display.print(bmp_data.tlak, 0);
   display.println(" hPa");
 
-  float zbyvajici_objem = osa_z - vzdalenost - offset;
-  int vyska_vyplne = (zbyvajici_objem * (vyska_obdelniku - 2)) / osa_z;
+  float vypotrebovany_objem = vzdalenost - offset;
+  int vyska_vyplne = (vypotrebovany_objem * (vyska_obdelniku - 2)) / osa_z;
   display.fillRect(pozice_x, pozice_y, sirka_obdelniku, vyska_obdelniku, SSD1306_WHITE); // Draw rectangle on display
   if (objem_vody > 0) {
   display.fillRect(pozice_x + 1, pozice_y + 1, sirka_obdelniku - 2, vyska_vyplne, SSD1306_BLACK); // Fill rectangle based on water volume
