@@ -129,7 +129,7 @@ void loop() {
   display.setCursor(0, 0);
 
   vlhkost_pudy_percent = soilMoistureSetup();  // Ulož vrácené hodnotu
-  float vzdalenost = HCSR04Setup();  // Ulož vrácené hodnotu
+  float vzdalenost = 0.5;  // Ulož vrácené hodnotu
 
   int touchValue = touchRead(TOUCH_PIN);  // Read touch sensor value
   Serial.print("Touch Value: ");
@@ -163,9 +163,11 @@ void loop() {
   display.print(bmp_data.tlak, 0);
   display.println(" hPa");
 
+  float vypotrebovany_objem = vzdalenost - offset;
+  int vyska_vyplne = (vypotrebovany_objem * (vyska_obdelniku - 2)) / osa_z;
   display.fillRect(pozice_x, pozice_y, sirka_obdelniku, vyska_obdelniku, SSD1306_WHITE); // Draw rectangle on display
   if (objem_vody > 0) {
-  display.fillRect(pozice_x + 1, pozice_y + 1, sirka_obdelniku - 2, ((osa_z - vzdalenost - offset) / osa_z * vyska_obdelniku), SSD1306_BLACK); // Fill rectangle based on water volume
+  display.fillRect(pozice_x + 1, pozice_y + 1, sirka_obdelniku - 2, vyska_vyplne, SSD1306_BLACK); // Fill rectangle based on water volume
   }
   display.display(); // Update the display with new data
 
