@@ -140,8 +140,8 @@ void loop() {
   }
   
   if (vlhkost_pudy_percent < puda_MIN_percent) { // If soil moisture is below 30%
-    //digitalWrite(pumpPin, HIGH); // Turn on the water pump
-    //Serial.println("Pumpa zapnuta");
+    digitalWrite(pumpPin, HIGH); // Turn on the water pump
+    Serial.println("Pumpa zapnuta");
   } else {
     digitalWrite(pumpPin, LOW); // Turn off the water pump
     Serial.println("Pumpa vypnuta");
